@@ -1,1 +1,6 @@
-theme: jekyll-theme-slate
+theme: jekyll-theme-minimal
+title: PatronManager API Documentation
+logo: assets/PM_logo_stacked_transparent_320x132.png
+
+github:
+  is_project_page: false
