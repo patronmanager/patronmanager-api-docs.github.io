@@ -1,0 +1,20 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+img{
+    margin: 0;
+    padding: 0;
+    border-box: 0;
+    border: 0;
+    box-shadow: none;
+}
+
+#header_wrap .inner{
+    padding:0;
+}
+
+.inner{
+    max-width:1000px;
+}
