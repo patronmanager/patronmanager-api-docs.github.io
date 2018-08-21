@@ -14,7 +14,7 @@ The Public Event List is read-only, requires no authentication and returns the p
 
 The server will GZIP the response if you provide the proper 'Accepts-Encoding' header on your GET request.
 
-You should be able to load the URL in your web browser and see the JSON payload. If you use a tool like Firefox of Chrome Dev Tools, you should be able to directly browse the JSON entities under the 'Network' tab.
+You should be able to load the URL in your web browser and see the JSON payload. If you use a tool like Firefox or Chrome Dev Tools, you should be able to directly browse the JSON entities under the 'Network' tab.
 
 ### Document Structure
 ```javascript
@@ -74,9 +74,6 @@ class TicketAllocation
     public Integer sortOrder;
     public List<TicketPriceLevel> levels = new List<TicketPriceLevel>();
     public Boolean soldOut;
-    //We don't want this serialized out to the requesting client for now
-    public transient Integer availableQty;
-    public transient EventInstance instance;
 }
 
 class TicketPriceLevel
