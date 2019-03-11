@@ -7,8 +7,6 @@ The [glossary](glossary.md) defines terminology used throughout this site and Pa
 
 Here are a few live sites that use the feed:
 
-[http://labtheater.org/](http://labtheater.org/)
-
 [http://neofuturists.org/](http://neofuturists.org/)
 
 [http://tickets.interlochen.org](http://tickets.interlochen.org)
