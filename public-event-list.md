@@ -1,4 +1,4 @@
-## Public Event List
+## Event Inventory API
 
 ### Overview
 First, you should review our [Glossary](glossary.md) so that the terminology used below is clear. 
