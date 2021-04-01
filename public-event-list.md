@@ -53,8 +53,10 @@ class EventInstance
     public Boolean earlyAccess = false; // True if early access to the EI is being granted as a Membership benefit
     public String seatingType; // "General Admission" or "Pick Your Own Seats"
     public String purchaseUrl; // URL to the direct purchase page for this EI
-    public Boolean soldOut = true; // false unless all TAs are sold out
+    public Boolean soldOut = true; // False unless all TAs are sold out
     public String noSaleMessage; // Message to display if EI is soldOut, 'No longer on sale', or 'Not on sale yet'
+    public String contentFormat; // "Standard" (a live in-person EI), "Livestream (RTMP)", "Livestream (External)", or "Video on Demand"
+    public Boolean isPasscodeEligible = false; // True if the Event Instance is available for purchase prior to its public on-sale with the use of a Passcode
     public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.EventInstancePublicFieldSet__c
     public List<TicketAllocation> allocations = new List<TicketAllocation>();
 }
@@ -136,268 +138,566 @@ To get the custom included in the Public Event List payload, first create a Fiel
 ### Example
 ```javascript
 {
-  "venues": {
-    "a05800000070JMaAAM": {
-      "id": "a05800000070JMaAAM",
-      "name": "Falcon Theatre",
-      "lastModifiedDate": "2012-08-06T16:28:39.000Z",
-      "detail": "<p>4252 Riverside Dr. <br />Burbank, CA 91505</p>\n<p>(818) 955-8101 <br /><br />Corner of Rose St. and Riverside Dr., across from the historic Bob's Big Boy restaurant in Toluca Lake. <br /><br />Free parking available.<br /><br />All sales final, no refunds, no exchanges.</p>",
-      "address": null
+  "venues" : {
+    "a1A8A000001ZPFUUA4" : {
+      "name" : "Allentown Symphony Hall",
+      "lastModifiedDate" : "2021-03-26T16:55:08.000Z",
+      "id" : "a1A8A000001ZPFUUA4",
+      "detail" : null,
+      "address" : null
     },
-    "a0580000007STVmAAO": {
-      "id": "a0580000007STVmAAO",
-      "name": "Wide Theatre",
-      "lastModifiedDate": "2012-08-03T18:10:47.000Z",
-      "detail": "<h2>A Wide Theatre for Testing Purposes</h2>",
-      "address": "7 Research Drive\r\nWoodbridge CT, 06525"
+    "a1A8A000001ZPAUUA4" : {
+      "name" : "The Barn",
+      "lastModifiedDate" : "2021-03-26T16:20:20.000Z",
+      "id" : "a1A8A000001ZPAUUA4",
+      "detail" : null,
+      "address" : null
     }
   },
-  "events": [
-    {
-      "id": "a018000000N2wwSAAR",
-      "name": "The Tom Show",
-      "type": "Tickets",
-      "sortOrder": 0,
-      "purchaseUrl": "https://sillytickets.secure.force.com/ticket#details_a018000000N2wwSAAR",
-      "description": "<p>He's the coolest guy around!</p>",
-      "detail": "<p>It's the greatest show on Earth!</p>",
-      "category": "Play;Comedy",
-      "instances": [
-        {
-          "id": "a068000000OgviCAAR",
-          "name": "Wide Theatre, Sept. 30, 2012",
-          "eventId": "a018000000N2wwSAAR",
-          "venueId": "a0580000007STVmAAO",
-          "soldOut": false,
-          "seatingType": "Pick Your Own Seats",
-          "saleStatus": "On Sale",
-          "purchaseUrl": "https://sillytickets.secure.force.com/ticket#sections_a068000000OgviCAAR",
-          "noSaleMessage": null,
-          "formattedDates": {
-            "YYYYMMDD": "20121001",
-            "LONG_MONTH_DAY_YEAR": "October 1, 2012",
-            "ISO8601": "2012-10-01T00:00:00.000Z"
-          },
-          "detail": null,
-          "allocations": [
-            {
-              "id": "a078000000GfruEAAR",
-              "name": "Floor",
-              "instanceId": "a068000000OgviCAAR",
-              "sortOrder": 0,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000HdzTFAAZ",
-                  "name": "Adult",
-                  "allocationId": "a078000000GfruEAAR",
-                  "sortOrder": null,
-                  "price": 40,
-                  "fee": 4
-                },
-                {
-                  "id": "a048000000HdzTKAAZ",
-                  "name": "Child/Senior",
-                  "allocationId": "a078000000GfruEAAR",
-                  "sortOrder": null,
-                  "price": 30,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000GfsKCAAZ",
-              "name": "Friends of Tom",
-              "instanceId": "a068000000OgviCAAR",
-              "sortOrder": 1,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000Hdzf2AAB",
-                  "name": "Friends of Tom",
-                  "allocationId": "a078000000GfsKCAAZ",
-                  "sortOrder": null,
-                  "price": 10,
-                  "fee": 2
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "a068000000OjDHlAAN",
-          "name": "Falcon Theatre, Oct. 5, 2012",
-          "eventId": "a018000000N2wwSAAR",
-          "venueId": "a05800000070JMaAAM",
-          "soldOut": false,
-          "seatingType": "Pick Your Own Seats",
-          "saleStatus": "On Sale",
-          "purchaseUrl": "https://sillytickets.secure.force.com/ticket#sections_a068000000OjDHlAAN",
-          "noSaleMessage": null,
-          "formattedDates": {
-            "YYYYMMDD": "20121006",
-            "LONG_MONTH_DAY_YEAR": "October 6, 2012",
-            "ISO8601": "2012-10-06T00:00:00.000Z"
-          },
-          "detail": null,
-          "allocations": [
-            {
-              "id": "a078000000Gh8mCAAR",
-              "name": "Side",
-              "instanceId": "a068000000OjDHlAAN",
-              "sortOrder": 0,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000IuI3kAAF",
-                  "name": "Fri/Sat/Sun",
-                  "allocationId": "a078000000Gh8mCAAR",
-                  "sortOrder": null,
-                  "price": 39.5,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000Gh8mDAAR",
-              "name": "Center",
-              "instanceId": "a068000000OjDHlAAN",
-              "sortOrder": 1,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000IuI3lAAF",
-                  "name": "Fri/Sat/Sun",
-                  "allocationId": "a078000000Gh8mDAAR",
-                  "sortOrder": null,
-                  "price": 42,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000Gh8mFAAR",
-              "name": "Accessible Side",
-              "instanceId": "a068000000OjDHlAAN",
-              "sortOrder": 3,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000IuI3nAAF",
-                  "name": "Fri/Sat/Sun",
-                  "allocationId": "a078000000Gh8mFAAR",
-                  "sortOrder": null,
-                  "price": 39.5,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000Gh8oIAAR",
-              "name": "Accessible",
-              "instanceId": "a068000000OjDHlAAN",
-              "sortOrder": 4,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000IuI3oAAF",
-                  "name": "Fri/Sat/Sun",
-                  "allocationId": "a078000000Gh8oIAAR",
-                  "sortOrder": null,
-                  "price": 42,
-                  "fee": 4
-                }
-              ]
-            }
-          ]
-        }
-      ]
+  "events" : [ {
+    "type" : "Tickets",
+    "sortOrder" : 1,
+    "smallImagePath" : null,
+    "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/events/a178A000002gtOIQAY",
+    "name" : "Test Event",
+    "largeImagePath" : null,
+    "instances" : [ {
+      "venueId" : "a1A8A000001ZPAUUA4",
+      "soldOut" : false,
+      "seatingType" : "Pick Your Own Seats",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGOUAY",
+      "noSaleMessage" : null,
+      "name" : "Access Code Event (PYOS) Dec. 25th 2029 8pm",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002udGOUAY",
+      "formattedDates" : {
+        "YYYYMMDD" : "20291225",
+        "LONG_MONTH_DAY_YEAR" : "December 25, 2029",
+        "ISO8601" : "2029-12-25T14:09:00.000Z"
+      },
+      "eventName" : "Test Event",
+      "eventId" : "a178A000002gtOIQAY",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "appliedPasscode" : null,
+      "allocations" : [ {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Tier 2",
+        "levels" : [ ],
+        "instanceId" : "a0W8A000002udGOUAY",
+        "id" : "a128A000003JSqgQAG"
+      } ]
+    }, {
+      "venueId" : "a1A8A000001ZPAUUA4",
+      "soldOut" : false,
+      "seatingType" : "Pick Your Own Seats",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGpUAI",
+      "noSaleMessage" : null,
+      "name" : "Test Event (PYOC) Dec. 25th 2029 8pm",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002udGpUAI",
+      "formattedDates" : {
+        "YYYYMMDD" : "20291226",
+        "LONG_MONTH_DAY_YEAR" : "December 26, 2029",
+        "ISO8601" : "2029-12-26T04:00:00.000Z"
+      },
+      "eventName" : "Test Event",
+      "eventId" : "a178A000002gtOIQAY",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "appliedPasscode" : null,
+      "allocations" : [ {
+        "sortOrder" : 0,
+        "soldOut" : false,
+        "name" : "Tier 1",
+        "levels" : [ ],
+        "instanceId" : "a0W8A000002udGpUAI",
+        "id" : "a128A000003JSqFQAW"
+      }, {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Tier 2",
+        "levels" : [ ],
+        "instanceId" : "a0W8A000002udGpUAI",
+        "id" : "a128A000003JSqTQAW"
+      } ]
+    }, {
+      "venueId" : null,
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGUUAY",
+      "noSaleMessage" : null,
+      "name" : "NOSY Event (GA) Dec. 26th 2029 8pm",
+      "isPasscodeEligible" : true,
+      "id" : "a0W8A000002udGUUAY",
+      "formattedDates" : {
+        "YYYYMMDD" : "20291227",
+        "LONG_MONTH_DAY_YEAR" : "December 27, 2029",
+        "ISO8601" : "2029-12-27T04:00:00.000Z"
+      },
+      "eventName" : "Test Event",
+      "eventId" : "a178A000002gtOIQAY",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "appliedPasscode" : null,
+      "allocations" : [ ]
+    } ],
+    "id" : "a178A000002gtOIQAY",
+    "detail" : null,
+    "description" : null,
+    "custom" : {
+      "PatronTicket__XYZZY_CustomTextArea__c" : null,
+      "PatronTicket__XYZZY_CustomText__c" : null,
+      "PatronTicket__XYZZY_CustomCheckbox__c" : false
     },
-    {
-      "id": "a018000000RjkZ1AAJ",
-      "name": "Twelve Angry Men - 2012",
-      "type": "Tickets",
-      "sortOrder": 41,
-      "purchaseUrl": "https://sillytickets.secure.force.com/ticket#details_a018000000RjkZ1AAJ",
-      "description": null,
-      "detail": null,
-      "category": "Play;Drama",
-      "instances": [
-        {
-          "id": "a068000000X6rHzAAJ",
-          "name": "November 2, 2012",
-          "eventId": "a018000000RjkZ1AAJ",
-          "venueId": null,
-          "soldOut": false,
-          "seatingType": "General Admission",
-          "saleStatus": "No longer on sale",
-          "purchaseUrl": "https://sillytickets.secure.force.com/ticket#sections_a068000000X6rHzAAJ",
-          "noSaleMessage": "The sale date has passed for this instance",
-          "formattedDates": {
-            "YYYYMMDD": "20121102",
-            "LONG_MONTH_DAY_YEAR": "November 2, 2012",
-            "ISO8601": "2012-11-02T23:00:00.000Z"
-          },
-          "detail": null,
-          "allocations": []
-        },
-        {
-          "id": "a068000000X6rIOAAZ",
-          "name": "November 9, 2012",
-          "eventId": "a018000000RjkZ1AAJ",
-          "venueId": null,
-          "soldOut": false,
-          "seatingType": "General Admission",
-          "saleStatus": "On Sale",
-          "purchaseUrl": "https://sillytickets.secure.force.com/ticket#sections_a068000000X6rIOAAZ",
-          "noSaleMessage": null,
-          "formattedDates": {
-            "YYYYMMDD": "20121110",
-            "LONG_MONTH_DAY_YEAR": "November 10, 2012",
-            "ISO8601": "2012-11-10T00:00:00.000Z"
-          },
-          "detail": null,
-          "allocations": [
-            {
-              "id": "a078000000JmYgtAAF",
-              "name": "General Admission",
-              "instanceId": "a068000000X6rIOAAZ",
-              "sortOrder": 1,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000KEqUTAA1",
-                  "name": "Standard",
-                  "allocationId": "a078000000JmYgtAAF",
-                  "sortOrder": null,
-                  "price": 30,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000JmYgsAAF",
-              "name": "Wheelchair",
-              "instanceId": "a068000000X6rIOAAZ",
-              "sortOrder": 2,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000KEqUUAA1",
-                  "name": "Standard",
-                  "allocationId": "a078000000JmYgsAAF",
-                  "sortOrder": null,
-                  "price": 30,
-                  "fee": 4
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    "category" : "Play;Comedy"
+  }, {
+    "type" : "Tickets",
+    "sortOrder" : 2,
+    "smallImagePath" : null,
+    "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/events/a178A000002gtaAQAQ",
+    "name" : "The Tom Show - 2021",
+    "largeImagePath" : null,
+    "instances" : [ {
+      "venueId" : null,
+      "soldOut" : true,
+      "seatingType" : "General Admission",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002upGDUAY",
+      "noSaleMessage" : "<p>Custom \"Sold Out\" message</p>",
+      "name" : "Sold Out",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002upGDUAY",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210801",
+        "LONG_MONTH_DAY_YEAR" : "August 1, 2021",
+        "ISO8601" : "2021-08-01T13:10:00.000Z"
+      },
+      "eventName" : "The Tom Show - 2021",
+      "eventId" : "a178A000002gtaAQAQ",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "appliedPasscode" : null,
+      "allocations" : [ ]
+    }, {
+      "venueId" : null,
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "No longer on sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002upG8UAI",
+      "noSaleMessage" : "<p>Custom \"No Longer On Sale\" message</p>",
+      "name" : "No Longer On Sale",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002upG8UAI",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210801",
+        "LONG_MONTH_DAY_YEAR" : "August 1, 2021",
+        "ISO8601" : "2021-08-01T13:10:00.000Z"
+      },
+      "eventName" : "The Tom Show - 2021",
+      "eventId" : "a178A000002gtaAQAQ",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "appliedPasscode" : null,
+      "allocations" : [ {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Public",
+        "levels" : [ {
+          "price" : 50.00,
+          "name" : "Public",
+          "id" : "a168A000002Ln9wQAC",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXKTQA4"
+        } ],
+        "instanceId" : "a0W8A000002upG8UAI",
+        "id" : "a128A000003JXKTQA4"
+      } ]
+    }, {
+      "venueId" : null,
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "Not on sale yet",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002upG3UAI",
+      "noSaleMessage" : "<p>Custom \"Not On Sale Yet\" message</p>",
+      "name" : "Not On Sale Yet",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002upG3UAI",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210801",
+        "LONG_MONTH_DAY_YEAR" : "August 1, 2021",
+        "ISO8601" : "2021-08-01T13:10:00.000Z"
+      },
+      "eventName" : "The Tom Show - 2021",
+      "eventId" : "a178A000002gtaAQAQ",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "appliedPasscode" : null,
+      "allocations" : [ {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Public",
+        "levels" : [ {
+          "price" : 50.00,
+          "name" : "Public",
+          "id" : "a168A000002Ln9rQAC",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXKOQA4"
+        } ],
+        "instanceId" : "a0W8A000002upG3UAI",
+        "id" : "a128A000003JXKOQA4"
+      } ]
+    }, {
+      "venueId" : "a1A8A000001ZPFUUA4",
+      "soldOut" : false,
+      "seatingType" : "Pick Your Own Seats",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udJFUAY",
+      "noSaleMessage" : null,
+      "name" : "Allentown Symphony Hall, December 1, 8 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002udJFUAY",
+      "formattedDates" : {
+        "YYYYMMDD" : "20211202",
+        "LONG_MONTH_DAY_YEAR" : "December 2, 2021",
+        "ISO8601" : "2021-12-02T01:00:00.000Z"
+      },
+      "eventName" : "The Tom Show - 2021",
+      "eventId" : "a178A000002gtaAQAQ",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "appliedPasscode" : null,
+      "allocations" : [ {
+        "sortOrder" : 0,
+        "soldOut" : false,
+        "name" : "Price Level A",
+        "levels" : [ {
+          "price" : 100.00,
+          "name" : "Standard",
+          "id" : "a168A000002LdfAQAS",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSs9QAG"
+        } ],
+        "instanceId" : "a0W8A000002udJFUAY",
+        "id" : "a128A000003JSs9QAG"
+      }, {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Price Level B",
+        "levels" : [ {
+          "price" : 90.00,
+          "name" : "Standard",
+          "id" : "a168A000002LdfFQAS",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSsAQAW"
+        } ],
+        "instanceId" : "a0W8A000002udJFUAY",
+        "id" : "a128A000003JSsAQAW"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Price Level C",
+        "levels" : [ {
+          "price" : 80.00,
+          "name" : "Standard",
+          "id" : "a168A000002LdfKQAS",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSsBQAW"
+        } ],
+        "instanceId" : "a0W8A000002udJFUAY",
+        "id" : "a128A000003JSsBQAW"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Price Level D",
+        "levels" : [ {
+          "price" : 70.00,
+          "name" : "Standard",
+          "id" : "a168A000002LdfMQAS",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSsCQAW"
+        } ],
+        "instanceId" : "a0W8A000002udJFUAY",
+        "id" : "a128A000003JSsCQAW"
+      }, {
+        "sortOrder" : 4,
+        "soldOut" : false,
+        "name" : "Orchestra Boxes",
+        "levels" : [ {
+          "price" : 95.00,
+          "name" : "Standard",
+          "id" : "a168A000002LdfPQAS",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSsDQAW"
+        } ],
+        "instanceId" : "a0W8A000002udJFUAY",
+        "id" : "a128A000003JSsDQAW"
+      }, {
+        "sortOrder" : 5,
+        "soldOut" : false,
+        "name" : "Mezzanine Boxes",
+        "levels" : [ {
+          "price" : 75.00,
+          "name" : "Standard",
+          "id" : "a168A000002LdfQQAS",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSsEQAW"
+        } ],
+        "instanceId" : "a0W8A000002udJFUAY",
+        "id" : "a128A000003JSsEQAW"
+      } ]
+    } ],
+    "id" : "a178A000002gtaAQAQ",
+    "detail" : null,
+    "description" : null,
+    "custom" : {
+      "PatronTicket__XYZZY_CustomTextArea__c" : null,
+      "PatronTicket__XYZZY_CustomText__c" : null,
+      "PatronTicket__XYZZY_CustomCheckbox__c" : false
+    },
+    "category" : null
+  }, {
+    "type" : "Tickets",
+    "sortOrder" : 3,
+    "smallImagePath" : null,
+    "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/events/a178A000002gtOQQAY",
+    "name" : "Virtual Events",
+    "largeImagePath" : null,
+    "instances" : [ {
+      "venueId" : null,
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udIlUAI",
+      "noSaleMessage" : null,
+      "name" : "VOD - How to Tie the Nail Knot",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002udIlUAI",
+      "formattedDates" : {
+        "YYYYMMDD" : "20220326",
+        "LONG_MONTH_DAY_YEAR" : "March 26, 2022",
+        "ISO8601" : "2022-03-26T16:45:00.000Z"
+      },
+      "eventName" : "Virtual Events",
+      "eventId" : "a178A000002gtOQQAY",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Video on Demand",
+      "appliedPasscode" : null,
+      "allocations" : [ {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "VOD",
+        "levels" : [ {
+          "price" : 5.00,
+          "name" : "Standard",
+          "id" : "a168A000002Ldf0QAC",
+          "fee" : 0.00,
+          "allocationId" : "a128A000003JSrzQAG"
+        } ],
+        "instanceId" : "a0W8A000002udIlUAI",
+        "id" : "a128A000003JSrzQAG"
+      } ]
+    }, {
+      "venueId" : null,
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udJAUAY",
+      "noSaleMessage" : null,
+      "name" : "VOD - The Only Fishing Knot You Need",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002udJAUAY",
+      "formattedDates" : {
+        "YYYYMMDD" : "20220326",
+        "LONG_MONTH_DAY_YEAR" : "March 26, 2022",
+        "ISO8601" : "2022-03-26T16:48:00.000Z"
+      },
+      "eventName" : "Virtual Events",
+      "eventId" : "a178A000002gtOQQAY",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Video on Demand",
+      "appliedPasscode" : null,
+      "allocations" : [ {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "VOD",
+        "levels" : [ {
+          "price" : 5.00,
+          "name" : "Standard",
+          "id" : "a168A000002Ldf5QAC",
+          "fee" : 0.00,
+          "allocationId" : "a128A000003JSs4QAG"
+        } ],
+        "instanceId" : "a0W8A000002udJAUAY",
+        "id" : "a128A000003JSs4QAG"
+      } ]
+    } ],
+    "id" : "a178A000002gtOQQAY",
+    "detail" : null,
+    "description" : null,
+    "custom" : {
+      "PatronTicket__XYZZY_CustomTextArea__c" : null,
+      "PatronTicket__XYZZY_CustomText__c" : null,
+      "PatronTicket__XYZZY_CustomCheckbox__c" : false
+    },
+    "category" : null
+  }, {
+    "type" : "Tickets",
+    "sortOrder" : 4,
+    "smallImagePath" : null,
+    "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/events/a178A000002gtOKQAY",
+    "name" : "Test Event - 2021",
+    "largeImagePath" : null,
+    "instances" : [ {
+      "venueId" : "a1A8A000001ZPAUUA4",
+      "soldOut" : false,
+      "seatingType" : "Pick Your Own Seats",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGeUAI",
+      "noSaleMessage" : null,
+      "name" : "PYOS Fulfillment, December 28, 8 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002udGeUAI",
+      "formattedDates" : {
+        "YYYYMMDD" : "20211229",
+        "LONG_MONTH_DAY_YEAR" : "December 29, 2021",
+        "ISO8601" : "2021-12-29T04:00:00.000Z"
+      },
+      "eventName" : "Test Event - 2021",
+      "eventId" : "a178A000002gtOKQAY",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "appliedPasscode" : null,
+      "allocations" : [ {
+        "sortOrder" : 0,
+        "soldOut" : false,
+        "name" : "Tier 1",
+        "levels" : [ ],
+        "instanceId" : "a0W8A000002udGeUAI",
+        "id" : "a128A000003JSqDQAW"
+      }, {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Tier 2",
+        "levels" : [ ],
+        "instanceId" : "a0W8A000002udGeUAI",
+        "id" : "a128A000003JSqaQAG"
+      } ]
+    }, {
+      "venueId" : "a1A8A000001ZPAUUA4",
+      "soldOut" : false,
+      "seatingType" : "Pick Your Own Seats",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGhUAI",
+      "noSaleMessage" : null,
+      "name" : "PYOS Fulfillment, December 29, 8 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002udGhUAI",
+      "formattedDates" : {
+        "YYYYMMDD" : "20211230",
+        "LONG_MONTH_DAY_YEAR" : "December 30, 2021",
+        "ISO8601" : "2021-12-30T04:00:00.000Z"
+      },
+      "eventName" : "Test Event - 2021",
+      "eventId" : "a178A000002gtOKQAY",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "PatronTicket__XYZZY_CustomText__c" : null,
+        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
+        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "appliedPasscode" : null,
+      "allocations" : [ {
+        "sortOrder" : 0,
+        "soldOut" : false,
+        "name" : "Tier 1",
+        "levels" : [ ],
+        "instanceId" : "a0W8A000002udGhUAI",
+        "id" : "a128A000003JSqNQAW"
+      }, {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Tier 2",
+        "levels" : [ ],
+        "instanceId" : "a0W8A000002udGhUAI",
+        "id" : "a128A000003JSqZQAW"
+      } ]
+    } ],
+    "id" : "a178A000002gtOKQAY",
+    "detail" : null,
+    "description" : null,
+    "custom" : {
+      "PatronTicket__XYZZY_CustomTextArea__c" : null,
+      "PatronTicket__XYZZY_CustomText__c" : null,
+      "PatronTicket__XYZZY_CustomCheckbox__c" : false
+    },
+    "category" : "Play;Comedy"
+  } ]
 }
 ```
-
-
