@@ -636,7 +636,7 @@ To get the custom included in the Public Event List payload, first create a Fiel
     "type" : "Membership",
     "sortOrder" : 20,
     "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a178A000002gtOLQAY",
-    "name" : "Test Membership",
+    "name" : "Membership",
     "instances" : [ {
       "venueId" : null,
       "soldOut" : false,
@@ -644,7 +644,7 @@ To get the custom included in the Public Event List payload, first create a Fiel
       "saleStatus" : "On Sale",
       "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a178A000002gtOLQAY",
       "noSaleMessage" : null,
-      "name" : "Test Membership",
+      "name" : "Membership",
       "isPasscodeEligible" : false,
       "id" : "a0W8A000002udGtUAI",
       "formattedDates" : {
@@ -652,7 +652,7 @@ To get the custom included in the Public Event List payload, first create a Fiel
         "LONG_MONTH_DAY_YEAR" : "December 31, 2199",
         "ISO8601" : "2199-12-31T08:00:00.000Z"
       },
-      "eventName" : "Test Membership",
+      "eventName" : "Membership",
       "eventId" : "a178A000002gtOLQAY",
       "earlyAccess" : false,
       "detail" : null,
@@ -665,7 +665,7 @@ To get the custom included in the Public Event List payload, first create a Fiel
       "allocations" : [ {
         "sortOrder" : 0,
         "soldOut" : false,
-        "name" : "Test Membership",
+        "name" : "Membership",
         "levels" : [ {
           "price" : 125.00,
           "name" : "Platinum",
