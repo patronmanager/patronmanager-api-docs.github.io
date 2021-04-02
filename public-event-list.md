@@ -29,71 +29,72 @@ The JSON payload is an object containing two keys: "venues" and "events". The va
 ```java
 class TicketableEvent
 {
-    public Id id;
-    public String name;
-    public String description; // Rich text (HTML) description of the TE
-    public String detail; // Rich text (HTML) details
-    public String category; // Arbitrary list of category labels separated by semi-colon
-    public Integer sortOrder;
-    public String type; // Currently, "Tickets", "Subscription" or "Membership"
-    public String purchaseUrl; // URL to the page containing links to all EIs
-    public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.TicketableEventPublicFieldSet__c
-    public List<EventInstance> instances = new List<EventInstance>();
+	public Id id;
+	public String name;
+	public String description; // Rich text (HTML) description of the TE
+	public String detail; // Rich text (HTML) details
+	public String category; // Arbitrary list of category labels separated by semi-colon
+	public Integer sortOrder;
+	public String type; // Currently, "Tickets", "Subscription" or "Membership"
+	public String purchaseUrl; // URL to the page containing links to all EIs
+	public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.TicketableEventPublicFieldSet__c
+	public List<EventInstance> instances = new List<EventInstance>();
 }
 
 class EventInstance
 {
-    public Id id;
-    public Id eventId;
-    public Id venueId;
-    public String name;
-    public String detail; // Rich text (HTML) details about this specific EI
-    public Dates formattedDates = new Dates();
-    public String saleStatus; // "On Sale", "No longer on sale", "Not on sale yet"
-    public Boolean earlyAccess = false; // True if early access to the EI is being granted as a Membership benefit
-    public String seatingType; // "General Admission" or "Pick Your Own Seats"
-    public String purchaseUrl; // URL to the direct purchase page for this EI
-    public Boolean soldOut = true; // False unless all TAs are sold out
-    public String noSaleMessage; // Message to display if EI is soldOut, 'No longer on sale', or 'Not on sale yet'
-    public String contentFormat; // "Standard" (a live in-person EI), "Livestream (RTMP)", "Livestream (External)", or "Video on Demand"
-    public Boolean isPasscodeEligible = false; // True if the Event Instance is available for purchase prior to its public on-sale with the use of a Passcode
-    public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.EventInstancePublicFieldSet__c
-    public List<TicketAllocation> allocations = new List<TicketAllocation>();
+	public Id id;
+	public Id eventId;
+	public Id venueId;
+	public String name;
+	public String eventName;
+	public String detail; // Rich text (HTML) details about this specific EI
+	public Dates formattedDates = new Dates();
+	public String saleStatus; // "On Sale", "No longer on sale", "Not on sale yet"
+	public Boolean earlyAccess = false; // True if early access to the EI is being granted as a Membership benefit
+	public String seatingType; // "General Admission" or "Pick Your Own Seats"
+	public String contentFormat; // "Standard", "Video on Demand", etc.
+	public String purchaseUrl; // URL to the direct purchase page for this EI
+	public Boolean soldOut = true; // false unless all TAs are sold out
+	public String noSaleMessage; // Message to display if EI is soldOut, 'No longer on sale', or 'Not on sale yet'
+	public Boolean isPasscodeEligible = false; // True if the Event Instance is available for purchase prior to its public on-sale with the use of a Passcode
+	public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.EventInstancePublicFieldSet__c
+	public List<TicketAllocation> allocations = new List<TicketAllocation>();
 }
 
 class Dates
 {
-    public DateTime ISO8601;
-    public String LONG_MONTH_DAY_YEAR; // "September 22, 2012"
-    public String YYYYMMDD; // "20120922"
+	public DateTime ISO8601;
+	public String LONG_MONTH_DAY_YEAR; // "September 22, 2012"
+	public String YYYYMMDD; // "20120922"
 }
 
 class TicketAllocation
 {
-    public Id id;
-    public Id instanceId;
-    public String name;
-    public Integer sortOrder;
-    public List<TicketPriceLevel> levels = new List<TicketPriceLevel>();
-    public Boolean soldOut;
+	public Id id;
+	public Id instanceId;
+	public String name;
+	public Integer sortOrder;
+	public List<TicketPriceLevel> levels = new List<TicketPriceLevel>();
+	public Boolean soldOut;
 }
 
 class TicketPriceLevel
 {
-    public Id id;
-    public Id allocationId;
-    public String name;
-    public Decimal price;
-    public Decimal fee; // Fee that will be added to the price of the ticket
+	public Id id;
+	public Id allocationId;
+	public String name;
+	public Decimal price;
+	public Decimal fee; // Fee that will be added to the price of the ticket
 }
 
 class Venue
 {
-    public Id id;
-    public String name;
-    public String address;
-    public String detail;
-    public DateTime lastModifiedDate;
+	public Id id;
+	public String name;
+	public String address;
+	public String detail;
+	public DateTime lastModifiedDate;
 }
 ```
 
@@ -139,565 +140,564 @@ To get the custom included in the Public Event List payload, first create a Fiel
 ```javascript
 {
   "venues" : {
-    "a1A8A000001ZPFUUA4" : {
-      "name" : "Allentown Symphony Hall",
-      "lastModifiedDate" : "2021-03-26T16:55:08.000Z",
-      "id" : "a1A8A000001ZPFUUA4",
-      "detail" : null,
-      "address" : null
-    },
-    "a1A8A000001ZPAUUA4" : {
-      "name" : "The Barn",
-      "lastModifiedDate" : "2021-03-26T16:20:20.000Z",
-      "id" : "a1A8A000001ZPAUUA4",
-      "detail" : null,
-      "address" : null
+    "a1A8A000001ZUvKUAW" : {
+      "name" : "The Sample Venue Theatre",
+      "lastModifiedDate" : "2021-04-02T12:26:16.000Z",
+      "id" : "a1A8A000001ZUvKUAW",
+      "detail" : "<h3>The Sample Venue Theatre is located at 3639 Williams Lane, Wichita, KS 67202</h3>\r\n<p>This beautiful 360 seat venue features superb acoustic and comfortable seating. For more information, please contact the box office at:</p>\r\n<p>Email: boxoffice@samplevenue.org</p>\r\n<p>Phone:&nbsp;316-665-7204</p>",
+      "address" : "3639 Williams Lane\r\nWichita, KS 67202"
     }
   },
   "events" : [ {
     "type" : "Tickets",
-    "sortOrder" : 1,
-    "smallImagePath" : null,
-    "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/events/a178A000002gtOIQAY",
-    "name" : "Test Event",
-    "largeImagePath" : null,
+    "sortOrder" : 10,
+    "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/events/a178A000002h2L0QAI",
+    "name" : "Romeo & Juliet",
     "instances" : [ {
-      "venueId" : "a1A8A000001ZPAUUA4",
-      "soldOut" : false,
-      "seatingType" : "Pick Your Own Seats",
-      "saleStatus" : "On Sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGOUAY",
-      "noSaleMessage" : null,
-      "name" : "Access Code Event (PYOS) Dec. 25th 2029 8pm",
-      "isPasscodeEligible" : false,
-      "id" : "a0W8A000002udGOUAY",
-      "formattedDates" : {
-        "YYYYMMDD" : "20291225",
-        "LONG_MONTH_DAY_YEAR" : "December 25, 2029",
-        "ISO8601" : "2029-12-25T14:09:00.000Z"
-      },
-      "eventName" : "Test Event",
-      "eventId" : "a178A000002gtOIQAY",
-      "earlyAccess" : false,
-      "detail" : null,
-      "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
-      },
-      "contentFormat" : "Standard",
-      "appliedPasscode" : null,
-      "allocations" : [ {
-        "sortOrder" : 1,
-        "soldOut" : false,
-        "name" : "Tier 2",
-        "levels" : [ ],
-        "instanceId" : "a0W8A000002udGOUAY",
-        "id" : "a128A000003JSqgQAG"
-      } ]
-    }, {
-      "venueId" : "a1A8A000001ZPAUUA4",
-      "soldOut" : false,
-      "seatingType" : "Pick Your Own Seats",
-      "saleStatus" : "On Sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGpUAI",
-      "noSaleMessage" : null,
-      "name" : "Test Event (PYOC) Dec. 25th 2029 8pm",
-      "isPasscodeEligible" : false,
-      "id" : "a0W8A000002udGpUAI",
-      "formattedDates" : {
-        "YYYYMMDD" : "20291226",
-        "LONG_MONTH_DAY_YEAR" : "December 26, 2029",
-        "ISO8601" : "2029-12-26T04:00:00.000Z"
-      },
-      "eventName" : "Test Event",
-      "eventId" : "a178A000002gtOIQAY",
-      "earlyAccess" : false,
-      "detail" : null,
-      "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
-      },
-      "contentFormat" : "Standard",
-      "appliedPasscode" : null,
-      "allocations" : [ {
-        "sortOrder" : 0,
-        "soldOut" : false,
-        "name" : "Tier 1",
-        "levels" : [ ],
-        "instanceId" : "a0W8A000002udGpUAI",
-        "id" : "a128A000003JSqFQAW"
-      }, {
-        "sortOrder" : 1,
-        "soldOut" : false,
-        "name" : "Tier 2",
-        "levels" : [ ],
-        "instanceId" : "a0W8A000002udGpUAI",
-        "id" : "a128A000003JSqTQAW"
-      } ]
-    }, {
-      "venueId" : null,
+      "venueId" : "a1A8A000001ZUvKUAW",
       "soldOut" : false,
       "seatingType" : "General Admission",
       "saleStatus" : "On Sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGUUAY",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uugYUAQ",
       "noSaleMessage" : null,
-      "name" : "NOSY Event (GA) Dec. 26th 2029 8pm",
-      "isPasscodeEligible" : true,
-      "id" : "a0W8A000002udGUUAY",
-      "formattedDates" : {
-        "YYYYMMDD" : "20291227",
-        "LONG_MONTH_DAY_YEAR" : "December 27, 2029",
-        "ISO8601" : "2029-12-27T04:00:00.000Z"
-      },
-      "eventName" : "Test Event",
-      "eventId" : "a178A000002gtOIQAY",
-      "earlyAccess" : false,
-      "detail" : null,
-      "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
-      },
-      "contentFormat" : "Standard",
-      "appliedPasscode" : null,
-      "allocations" : [ ]
-    } ],
-    "id" : "a178A000002gtOIQAY",
-    "detail" : null,
-    "description" : null,
-    "custom" : {
-      "PatronTicket__XYZZY_CustomTextArea__c" : null,
-      "PatronTicket__XYZZY_CustomText__c" : null,
-      "PatronTicket__XYZZY_CustomCheckbox__c" : false
-    },
-    "category" : "Play;Comedy"
-  }, {
-    "type" : "Tickets",
-    "sortOrder" : 2,
-    "smallImagePath" : null,
-    "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/events/a178A000002gtaAQAQ",
-    "name" : "The Tom Show - 2021",
-    "largeImagePath" : null,
-    "instances" : [ {
-      "venueId" : null,
-      "soldOut" : true,
-      "seatingType" : "General Admission",
-      "saleStatus" : "On Sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002upGDUAY",
-      "noSaleMessage" : "<p>Custom \"Sold Out\" message</p>",
-      "name" : "Sold Out",
+      "name" : "April 15, 2021, 8 PM",
       "isPasscodeEligible" : false,
-      "id" : "a0W8A000002upGDUAY",
+      "id" : "a0W8A000002uugYUAQ",
       "formattedDates" : {
-        "YYYYMMDD" : "20210801",
-        "LONG_MONTH_DAY_YEAR" : "August 1, 2021",
-        "ISO8601" : "2021-08-01T13:10:00.000Z"
+        "YYYYMMDD" : "20210416",
+        "LONG_MONTH_DAY_YEAR" : "April 16, 2021",
+        "ISO8601" : "2021-04-16T00:00:00.000Z"
       },
-      "eventName" : "The Tom Show - 2021",
-      "eventId" : "a178A000002gtaAQAQ",
+      "eventName" : "Romeo & Juliet",
+      "eventId" : "a178A000002h2L0QAI",
       "earlyAccess" : false,
-      "detail" : null,
+      "detail" : "<h2>Here is an Event Instance with some information in the detail field</h2>\r\n<p>Note this field may contain HTML markup!</p>",
       "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+        "CustomText__c" : "Here's an EI with a single line of text",
+        "CustomMultiselectPicklist__c" : "Emerald;Fuchsia",
+        "CustomCheckbox__c" : false
       },
       "contentFormat" : "Standard",
-      "appliedPasscode" : null,
-      "allocations" : [ ]
-    }, {
-      "venueId" : null,
-      "soldOut" : false,
-      "seatingType" : "General Admission",
-      "saleStatus" : "No longer on sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002upG8UAI",
-      "noSaleMessage" : "<p>Custom \"No Longer On Sale\" message</p>",
-      "name" : "No Longer On Sale",
-      "isPasscodeEligible" : false,
-      "id" : "a0W8A000002upG8UAI",
-      "formattedDates" : {
-        "YYYYMMDD" : "20210801",
-        "LONG_MONTH_DAY_YEAR" : "August 1, 2021",
-        "ISO8601" : "2021-08-01T13:10:00.000Z"
-      },
-      "eventName" : "The Tom Show - 2021",
-      "eventId" : "a178A000002gtaAQAQ",
-      "earlyAccess" : false,
-      "detail" : null,
-      "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
-      },
-      "contentFormat" : "Standard",
-      "appliedPasscode" : null,
       "allocations" : [ {
         "sortOrder" : 1,
         "soldOut" : false,
-        "name" : "Public",
-        "levels" : [ {
-          "price" : 50.00,
-          "name" : "Public",
-          "id" : "a168A000002Ln9wQAC",
-          "fee" : 5.00,
-          "allocationId" : "a128A000003JXKTQA4"
-        } ],
-        "instanceId" : "a0W8A000002upG8UAI",
-        "id" : "a128A000003JXKTQA4"
-      } ]
-    }, {
-      "venueId" : null,
-      "soldOut" : false,
-      "seatingType" : "General Admission",
-      "saleStatus" : "Not on sale yet",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002upG3UAI",
-      "noSaleMessage" : "<p>Custom \"Not On Sale Yet\" message</p>",
-      "name" : "Not On Sale Yet",
-      "isPasscodeEligible" : false,
-      "id" : "a0W8A000002upG3UAI",
-      "formattedDates" : {
-        "YYYYMMDD" : "20210801",
-        "LONG_MONTH_DAY_YEAR" : "August 1, 2021",
-        "ISO8601" : "2021-08-01T13:10:00.000Z"
-      },
-      "eventName" : "The Tom Show - 2021",
-      "eventId" : "a178A000002gtaAQAQ",
-      "earlyAccess" : false,
-      "detail" : null,
-      "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
-      },
-      "contentFormat" : "Standard",
-      "appliedPasscode" : null,
-      "allocations" : [ {
-        "sortOrder" : 1,
-        "soldOut" : false,
-        "name" : "Public",
-        "levels" : [ {
-          "price" : 50.00,
-          "name" : "Public",
-          "id" : "a168A000002Ln9rQAC",
-          "fee" : 5.00,
-          "allocationId" : "a128A000003JXKOQA4"
-        } ],
-        "instanceId" : "a0W8A000002upG3UAI",
-        "id" : "a128A000003JXKOQA4"
-      } ]
-    }, {
-      "venueId" : "a1A8A000001ZPFUUA4",
-      "soldOut" : false,
-      "seatingType" : "Pick Your Own Seats",
-      "saleStatus" : "On Sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udJFUAY",
-      "noSaleMessage" : null,
-      "name" : "Allentown Symphony Hall, December 1, 8 PM",
-      "isPasscodeEligible" : false,
-      "id" : "a0W8A000002udJFUAY",
-      "formattedDates" : {
-        "YYYYMMDD" : "20211202",
-        "LONG_MONTH_DAY_YEAR" : "December 2, 2021",
-        "ISO8601" : "2021-12-02T01:00:00.000Z"
-      },
-      "eventName" : "The Tom Show - 2021",
-      "eventId" : "a178A000002gtaAQAQ",
-      "earlyAccess" : false,
-      "detail" : null,
-      "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
-      },
-      "contentFormat" : "Standard",
-      "appliedPasscode" : null,
-      "allocations" : [ {
-        "sortOrder" : 0,
-        "soldOut" : false,
-        "name" : "Price Level A",
+        "name" : "Orchestra",
         "levels" : [ {
           "price" : 100.00,
           "name" : "Standard",
-          "id" : "a168A000002LdfAQAS",
+          "id" : "a168A000002LnOcQAK",
           "fee" : 5.00,
-          "allocationId" : "a128A000003JSs9QAG"
-        } ],
-        "instanceId" : "a0W8A000002udJFUAY",
-        "id" : "a128A000003JSs9QAG"
-      }, {
-        "sortOrder" : 1,
-        "soldOut" : false,
-        "name" : "Price Level B",
-        "levels" : [ {
+          "allocationId" : "a128A000003JXiFQAW"
+        }, {
           "price" : 90.00,
-          "name" : "Standard",
-          "id" : "a168A000002LdfFQAS",
+          "name" : "Special",
+          "id" : "a168A000002LnOfQAK",
           "fee" : 5.00,
-          "allocationId" : "a128A000003JSsAQAW"
+          "allocationId" : "a128A000003JXiFQAW"
         } ],
-        "instanceId" : "a0W8A000002udJFUAY",
-        "id" : "a128A000003JSsAQAW"
+        "instanceId" : "a0W8A000002uugYUAQ",
+        "id" : "a128A000003JXiFQAW"
       }, {
         "sortOrder" : 2,
         "soldOut" : false,
-        "name" : "Price Level C",
+        "name" : "Mezzanine",
         "levels" : [ {
-          "price" : 80.00,
+          "price" : 90.00,
           "name" : "Standard",
-          "id" : "a168A000002LdfKQAS",
+          "id" : "a168A000002LnOaQAK",
           "fee" : 5.00,
-          "allocationId" : "a128A000003JSsBQAW"
+          "allocationId" : "a128A000003JXiGQAW"
+        }, {
+          "price" : 80.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOdQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiGQAW"
         } ],
-        "instanceId" : "a0W8A000002udJFUAY",
-        "id" : "a128A000003JSsBQAW"
+        "instanceId" : "a0W8A000002uugYUAQ",
+        "id" : "a128A000003JXiGQAW"
       }, {
         "sortOrder" : 3,
         "soldOut" : false,
-        "name" : "Price Level D",
+        "name" : "Balcony",
         "levels" : [ {
-          "price" : 70.00,
+          "price" : 80.00,
           "name" : "Standard",
-          "id" : "a168A000002LdfMQAS",
+          "id" : "a168A000002LnObQAK",
           "fee" : 5.00,
-          "allocationId" : "a128A000003JSsCQAW"
+          "allocationId" : "a128A000003JXiHQAW"
+        }, {
+          "price" : 70.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOeQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiHQAW"
         } ],
-        "instanceId" : "a0W8A000002udJFUAY",
-        "id" : "a128A000003JSsCQAW"
+        "instanceId" : "a0W8A000002uugYUAQ",
+        "id" : "a128A000003JXiHQAW"
+      } ]
+    }, {
+      "venueId" : "a1A8A000001ZUvKUAW",
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "Not on sale yet",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uugdUAA",
+      "noSaleMessage" : "<p>Hold your horses! Tickets for this performance are not available for sale yet. Coming soon!</p>",
+      "name" : "May 15, 2021, 8 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002uugdUAA",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210516",
+        "LONG_MONTH_DAY_YEAR" : "May 16, 2021",
+        "ISO8601" : "2021-05-16T00:00:00.000Z"
+      },
+      "eventName" : "Romeo & Juliet",
+      "eventId" : "a178A000002h2L0QAI",
+      "earlyAccess" : false,
+      "detail" : "<h2>Here is an Event Instance with some information in the detail field</h2>\r\n<p>Note this field may contain HTML markup!</p>",
+      "custom" : {
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : null,
+        "CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "allocations" : [ {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Orchestra",
+        "levels" : [ {
+          "price" : 100.00,
+          "name" : "Standard",
+          "id" : "a168A000002LnOmQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiKQAW"
+        }, {
+          "price" : 90.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOpQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiKQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugdUAA",
+        "id" : "a128A000003JXiKQAW"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Mezzanine",
+        "levels" : [ {
+          "price" : 90.00,
+          "name" : "Standard",
+          "id" : "a168A000002LnOoQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiLQAW"
+        }, {
+          "price" : 80.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOrQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiLQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugdUAA",
+        "id" : "a128A000003JXiLQAW"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Balcony",
+        "levels" : [ {
+          "price" : 80.00,
+          "name" : "Standard",
+          "id" : "a168A000002LnOnQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiMQAW"
+        }, {
+          "price" : 70.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOqQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiMQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugdUAA",
+        "id" : "a128A000003JXiMQAW"
+      } ]
+    } ],
+    "id" : "a178A000002h2L0QAI",
+    "detail" : "<h2>Here is some more detail about this performance</h2>\r\n<p>The detail field can contain HTML markup. Including hyperlinks like this one to&nbsp;<a href=\"https://www.google.com\">Google</a></p>",
+    "description" : "<h2>Here's an elaborate description of this performance</h2>\r\n<p>This performance is a \"General Admission\" performance, meaning that seating is on a first come first serve basis. Door's open 60 minutes before the show starts.</p>",
+    "custom" : {
+      "CustomTextArea__c" : "This is a multi-line custom text area.\r\nIt may contain text with embedded line breaks.\r\nHere another line.",
+      "CustomText__c" : "This field may contain a single line of text",
+      "CustomCheckbox__c" : true
+    },
+    "category" : "Play;Drama"
+  }, {
+    "type" : "Tickets",
+    "sortOrder" : 11,
+    "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/events/a178A000002h2L5QAI",
+    "name" : "Hamlet",
+    "instances" : [ {
+      "venueId" : "a1A8A000001ZUvKUAW",
+      "soldOut" : false,
+      "seatingType" : "Pick Your Own Seats",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uuk6UAA",
+      "noSaleMessage" : null,
+      "name" : "May 1, 7 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002uuk6UAA",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210501",
+        "LONG_MONTH_DAY_YEAR" : "May 1, 2021",
+        "ISO8601" : "2021-05-01T23:00:00.000Z"
+      },
+      "eventName" : "Hamlet",
+      "eventId" : "a178A000002h2L5QAI",
+      "earlyAccess" : false,
+      "detail" : "<h2>This is the Event Instance detail field</h2>\r\n<p>It may contain markup</p>",
+      "custom" : {
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : null,
+        "CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "allocations" : [ {
+        "sortOrder" : 0,
+        "soldOut" : false,
+        "name" : "Premium Orchestra",
+        "levels" : [ {
+          "price" : 100.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPQQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2TQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2TQAW"
+      }, {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Orchestra",
+        "levels" : [ {
+          "price" : 95.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPVQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2UQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2UQAW"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Premium Mezzanine",
+        "levels" : [ {
+          "price" : 90.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPUQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2VQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2VQAW"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Mezzanine",
+        "levels" : [ {
+          "price" : 85.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPTQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2WQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2WQAW"
       }, {
         "sortOrder" : 4,
         "soldOut" : false,
-        "name" : "Orchestra Boxes",
+        "name" : "Premium Balcony",
         "levels" : [ {
-          "price" : 95.00,
-          "name" : "Standard",
-          "id" : "a168A000002LdfPQAS",
+          "price" : 80.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPSQA0",
           "fee" : 5.00,
-          "allocationId" : "a128A000003JSsDQAW"
+          "allocationId" : "a128A000003JY2XQAW"
         } ],
-        "instanceId" : "a0W8A000002udJFUAY",
-        "id" : "a128A000003JSsDQAW"
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2XQAW"
       }, {
         "sortOrder" : 5,
         "soldOut" : false,
-        "name" : "Mezzanine Boxes",
+        "name" : "Balcony",
         "levels" : [ {
           "price" : 75.00,
-          "name" : "Standard",
-          "id" : "a168A000002LdfQQAS",
+          "name" : "Retail",
+          "id" : "a168A000002LnPRQA0",
           "fee" : 5.00,
-          "allocationId" : "a128A000003JSsEQAW"
+          "allocationId" : "a128A000003JY2YQAW"
         } ],
-        "instanceId" : "a0W8A000002udJFUAY",
-        "id" : "a128A000003JSsEQAW"
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2YQAW"
+      } ]
+    }, {
+      "venueId" : "a1A8A000001ZUvKUAW",
+      "soldOut" : false,
+      "seatingType" : "Pick Your Own Seats",
+      "saleStatus" : "Not on sale yet",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uugiUAA",
+      "noSaleMessage" : "<p>Here's a custom \"Not On Sale Yet\" message</p>",
+      "name" : "June 1, 7 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002uugiUAA",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210601",
+        "LONG_MONTH_DAY_YEAR" : "June 1, 2021",
+        "ISO8601" : "2021-06-01T23:00:00.000Z"
+      },
+      "eventName" : "Hamlet",
+      "eventId" : "a178A000002h2L5QAI",
+      "earlyAccess" : false,
+      "detail" : "<h2>This is the Event Instance detail field</h2>\r\n<p>It may contain markup</p>",
+      "custom" : {
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : "Orange;Purple",
+        "CustomCheckbox__c" : true
+      },
+      "contentFormat" : "Standard",
+      "allocations" : [ {
+        "sortOrder" : 0,
+        "soldOut" : false,
+        "name" : "Premium Orchestra",
+        "levels" : [ {
+          "price" : 100.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPDQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiPQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiPQAW"
+      }, {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Orchestra",
+        "levels" : [ {
+          "price" : 95.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPGQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiQQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiQQAW"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Premium Mezzanine",
+        "levels" : [ {
+          "price" : 90.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPIQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiRQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiRQAW"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Mezzanine",
+        "levels" : [ {
+          "price" : 85.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPKQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiSQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiSQAW"
+      }, {
+        "sortOrder" : 4,
+        "soldOut" : false,
+        "name" : "Premium Balcony",
+        "levels" : [ {
+          "price" : 80.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPMQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiTQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiTQAW"
+      }, {
+        "sortOrder" : 5,
+        "soldOut" : false,
+        "name" : "Balcony",
+        "levels" : [ {
+          "price" : 75.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPOQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiUQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiUQAW"
       } ]
     } ],
-    "id" : "a178A000002gtaAQAQ",
-    "detail" : null,
-    "description" : null,
+    "id" : "a178A000002h2L5QAI",
+    "detail" : "<h2>Here's an event with HTML detail</h2>\r\n<p>Notice the presence of html tags in this field.</p>",
+    "description" : "<h3>Here's an event with a description containing HTML markup</h3>\r\n<p>Notice the html tags in this field.</p>",
     "custom" : {
-      "PatronTicket__XYZZY_CustomTextArea__c" : null,
-      "PatronTicket__XYZZY_CustomText__c" : null,
-      "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      "CustomTextArea__c" : null,
+      "CustomText__c" : null,
+      "CustomCheckbox__c" : true
     },
-    "category" : null
+    "category" : "Concert;Jazz"
   }, {
-    "type" : "Tickets",
-    "sortOrder" : 3,
-    "smallImagePath" : null,
-    "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/events/a178A000002gtOQQAY",
-    "name" : "Virtual Events",
-    "largeImagePath" : null,
+    "type" : "Subscription",
+    "sortOrder" : 15,
+    "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/events/a178A000002h2MwQAI",
+    "name" : "Test Subscription",
     "instances" : [ {
       "venueId" : null,
       "soldOut" : false,
       "seatingType" : "General Admission",
       "saleStatus" : "On Sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udIlUAI",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uukVUAQ",
       "noSaleMessage" : null,
-      "name" : "VOD - How to Tie the Nail Knot",
+      "name" : "4-Show Fixed - Mixed GA / PYOS",
       "isPasscodeEligible" : false,
-      "id" : "a0W8A000002udIlUAI",
+      "id" : "a0W8A000002uukVUAQ",
       "formattedDates" : {
-        "YYYYMMDD" : "20220326",
-        "LONG_MONTH_DAY_YEAR" : "March 26, 2022",
-        "ISO8601" : "2022-03-26T16:45:00.000Z"
+        "YYYYMMDD" : "20210430",
+        "LONG_MONTH_DAY_YEAR" : "April 30, 2021",
+        "ISO8601" : "2021-04-30T23:00:00.000Z"
       },
-      "eventName" : "Virtual Events",
-      "eventId" : "a178A000002gtOQQAY",
+      "eventName" : "Test Subscription",
+      "eventId" : "a178A000002h2MwQAI",
       "earlyAccess" : false,
       "detail" : null,
       "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : null,
+        "CustomCheckbox__c" : false
       },
-      "contentFormat" : "Video on Demand",
-      "appliedPasscode" : null,
+      "contentFormat" : "Standard",
       "allocations" : [ {
         "sortOrder" : 1,
         "soldOut" : false,
-        "name" : "VOD",
+        "name" : "Orchestra",
         "levels" : [ {
-          "price" : 5.00,
-          "name" : "Standard",
-          "id" : "a168A000002Ldf0QAC",
-          "fee" : 0.00,
-          "allocationId" : "a128A000003JSrzQAG"
+          "price" : 310.00,
+          "name" : "Subscription",
+          "id" : "a168A000002LnPrQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY5qQAG"
         } ],
-        "instanceId" : "a0W8A000002udIlUAI",
-        "id" : "a128A000003JSrzQAG"
+        "instanceId" : "a0W8A000002uukVUAQ",
+        "id" : "a128A000003JY5qQAG"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Mezzanine",
+        "levels" : [ {
+          "price" : 270.00,
+          "name" : "Subscription",
+          "id" : "a168A000002LnPwQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY5vQAG"
+        } ],
+        "instanceId" : "a0W8A000002uukVUAQ",
+        "id" : "a128A000003JY5vQAG"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Balcony",
+        "levels" : [ {
+          "price" : 230.00,
+          "name" : "Subscription",
+          "id" : "a168A000002LnQ1QAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY6AQAW"
+        } ],
+        "instanceId" : "a0W8A000002uukVUAQ",
+        "id" : "a128A000003JY6AQAW"
       } ]
-    }, {
+    } ],
+    "id" : "a178A000002h2MwQAI",
+    "detail" : null,
+    "description" : null,
+    "custom" : {
+      "CustomTextArea__c" : null,
+      "CustomText__c" : null,
+      "CustomCheckbox__c" : false
+    },
+    "category" : null
+  }, {
+    "type" : "Membership",
+    "sortOrder" : 20,
+    "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a178A000002gtOLQAY",
+    "name" : "Test Membership",
+    "instances" : [ {
       "venueId" : null,
       "soldOut" : false,
       "seatingType" : "General Admission",
       "saleStatus" : "On Sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udJAUAY",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a178A000002gtOLQAY",
       "noSaleMessage" : null,
-      "name" : "VOD - The Only Fishing Knot You Need",
+      "name" : "Test Membership",
       "isPasscodeEligible" : false,
-      "id" : "a0W8A000002udJAUAY",
+      "id" : "a0W8A000002udGtUAI",
       "formattedDates" : {
-        "YYYYMMDD" : "20220326",
-        "LONG_MONTH_DAY_YEAR" : "March 26, 2022",
-        "ISO8601" : "2022-03-26T16:48:00.000Z"
+        "YYYYMMDD" : "21991231",
+        "LONG_MONTH_DAY_YEAR" : "December 31, 2199",
+        "ISO8601" : "2199-12-31T08:00:00.000Z"
       },
-      "eventName" : "Virtual Events",
-      "eventId" : "a178A000002gtOQQAY",
+      "eventName" : "Test Membership",
+      "eventId" : "a178A000002gtOLQAY",
       "earlyAccess" : false,
       "detail" : null,
       "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : null,
+        "CustomCheckbox__c" : false
       },
-      "contentFormat" : "Video on Demand",
-      "appliedPasscode" : null,
+      "contentFormat" : "Standard",
       "allocations" : [ {
-        "sortOrder" : 1,
+        "sortOrder" : 0,
         "soldOut" : false,
-        "name" : "VOD",
+        "name" : "Test Membership",
         "levels" : [ {
-          "price" : 5.00,
-          "name" : "Standard",
-          "id" : "a168A000002Ldf5QAC",
-          "fee" : 0.00,
-          "allocationId" : "a128A000003JSs4QAG"
+          "price" : 125.00,
+          "name" : "Platinum",
+          "id" : "a168A000002LnPmQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSqAQAW"
+        }, {
+          "price" : 100.00,
+          "name" : "Gold",
+          "id" : "a168A000002LnPcQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSqAQAW"
+        }, {
+          "price" : 75.00,
+          "name" : "Silver",
+          "id" : "a168A000002LnPhQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSqAQAW"
         } ],
-        "instanceId" : "a0W8A000002udJAUAY",
-        "id" : "a128A000003JSs4QAG"
+        "instanceId" : "a0W8A000002udGtUAI",
+        "id" : "a128A000003JSqAQAW"
       } ]
     } ],
-    "id" : "a178A000002gtOQQAY",
-    "detail" : null,
-    "description" : null,
+    "id" : "a178A000002gtOLQAY",
+    "detail" : "<h2>Here is the Membership detail value</h2>\r\n<p>This field also may contain HTML markup</p>",
+    "description" : "<h2>Here is a Membership with a description</h2>\r\n<p>This may contain HTML markup</p>",
     "custom" : {
-      "PatronTicket__XYZZY_CustomTextArea__c" : null,
-      "PatronTicket__XYZZY_CustomText__c" : null,
-      "PatronTicket__XYZZY_CustomCheckbox__c" : false
+      "CustomTextArea__c" : null,
+      "CustomText__c" : null,
+      "CustomCheckbox__c" : false
     },
     "category" : null
-  }, {
-    "type" : "Tickets",
-    "sortOrder" : 4,
-    "smallImagePath" : null,
-    "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/events/a178A000002gtOKQAY",
-    "name" : "Test Event - 2021",
-    "largeImagePath" : null,
-    "instances" : [ {
-      "venueId" : "a1A8A000001ZPAUUA4",
-      "soldOut" : false,
-      "seatingType" : "Pick Your Own Seats",
-      "saleStatus" : "On Sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGeUAI",
-      "noSaleMessage" : null,
-      "name" : "PYOS Fulfillment, December 28, 8 PM",
-      "isPasscodeEligible" : false,
-      "id" : "a0W8A000002udGeUAI",
-      "formattedDates" : {
-        "YYYYMMDD" : "20211229",
-        "LONG_MONTH_DAY_YEAR" : "December 29, 2021",
-        "ISO8601" : "2021-12-29T04:00:00.000Z"
-      },
-      "eventName" : "Test Event - 2021",
-      "eventId" : "a178A000002gtOKQAY",
-      "earlyAccess" : false,
-      "detail" : null,
-      "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
-      },
-      "contentFormat" : "Standard",
-      "appliedPasscode" : null,
-      "allocations" : [ {
-        "sortOrder" : 0,
-        "soldOut" : false,
-        "name" : "Tier 1",
-        "levels" : [ ],
-        "instanceId" : "a0W8A000002udGeUAI",
-        "id" : "a128A000003JSqDQAW"
-      }, {
-        "sortOrder" : 1,
-        "soldOut" : false,
-        "name" : "Tier 2",
-        "levels" : [ ],
-        "instanceId" : "a0W8A000002udGeUAI",
-        "id" : "a128A000003JSqaQAG"
-      } ]
-    }, {
-      "venueId" : "a1A8A000001ZPAUUA4",
-      "soldOut" : false,
-      "seatingType" : "Pick Your Own Seats",
-      "saleStatus" : "On Sale",
-      "purchaseUrl" : "https://sandbox-littledipper-aries-5925-1786f2f1715.cs45.force.com/ticket/#/instances/a0W8A000002udGhUAI",
-      "noSaleMessage" : null,
-      "name" : "PYOS Fulfillment, December 29, 8 PM",
-      "isPasscodeEligible" : false,
-      "id" : "a0W8A000002udGhUAI",
-      "formattedDates" : {
-        "YYYYMMDD" : "20211230",
-        "LONG_MONTH_DAY_YEAR" : "December 30, 2021",
-        "ISO8601" : "2021-12-30T04:00:00.000Z"
-      },
-      "eventName" : "Test Event - 2021",
-      "eventId" : "a178A000002gtOKQAY",
-      "earlyAccess" : false,
-      "detail" : null,
-      "custom" : {
-        "PatronTicket__XYZZY_CustomText__c" : null,
-        "PatronTicket__XYZZY_CustomMultiselectPicklist__c" : null,
-        "PatronTicket__XYZZY_CustomCheckbox__c" : false
-      },
-      "contentFormat" : "Standard",
-      "appliedPasscode" : null,
-      "allocations" : [ {
-        "sortOrder" : 0,
-        "soldOut" : false,
-        "name" : "Tier 1",
-        "levels" : [ ],
-        "instanceId" : "a0W8A000002udGhUAI",
-        "id" : "a128A000003JSqNQAW"
-      }, {
-        "sortOrder" : 1,
-        "soldOut" : false,
-        "name" : "Tier 2",
-        "levels" : [ ],
-        "instanceId" : "a0W8A000002udGhUAI",
-        "id" : "a128A000003JSqZQAW"
-      } ]
-    } ],
-    "id" : "a178A000002gtOKQAY",
-    "detail" : null,
-    "description" : null,
-    "custom" : {
-      "PatronTicket__XYZZY_CustomTextArea__c" : null,
-      "PatronTicket__XYZZY_CustomText__c" : null,
-      "PatronTicket__XYZZY_CustomCheckbox__c" : false
-    },
-    "category" : "Play;Comedy"
   } ]
 }
 ```
