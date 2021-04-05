@@ -29,69 +29,72 @@ The JSON payload is an object containing two keys: "venues" and "events". The va
 ```java
 class TicketableEvent
 {
-    public Id id;
-    public String name;
-    public String description; // Rich text (HTML) description of the TE
-    public String detail; // Rich text (HTML) details
-    public String category; // Arbitrary list of category labels separated by semi-colon
-    public Integer sortOrder;
-    public String type; // Currently, "Tickets", "Subscription" or "Membership"
-    public String purchaseUrl; // URL to the page containing links to all EIs
-    public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.TicketableEventPublicFieldSet__c
-    public List<EventInstance> instances = new List<EventInstance>();
+	public Id id;
+	public String name;
+	public String description; // Rich text (HTML) description of the TE
+	public String detail; // Rich text (HTML) details
+	public String category; // Arbitrary list of category labels separated by semi-colon
+	public Integer sortOrder;
+	public String type; // Currently, "Tickets", "Subscription" or "Membership"
+	public String purchaseUrl; // URL to the page containing links to all EIs
+	public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.TicketableEventPublicFieldSet__c
+	public List<EventInstance> instances = new List<EventInstance>();
 }
 
 class EventInstance
 {
-    public Id id;
-    public Id eventId;
-    public Id venueId;
-    public String name;
-    public String detail; // Rich text (HTML) details about this specific EI
-    public Dates formattedDates = new Dates();
-    public String saleStatus; // "On Sale", "No longer on sale", "Not on sale yet"
-    public Boolean earlyAccess = false; // True if early access to the EI is being granted as a Membership benefit
-    public String seatingType; // "General Admission" or "Pick Your Own Seats"
-    public String purchaseUrl; // URL to the direct purchase page for this EI
-    public Boolean soldOut = true; // false unless all TAs are sold out
-    public String noSaleMessage; // Message to display if EI is soldOut, 'No longer on sale', or 'Not on sale yet'
-    public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.EventInstancePublicFieldSet__c
-    public List<TicketAllocation> allocations = new List<TicketAllocation>();
+	public Id id;
+	public Id eventId;
+	public Id venueId;
+	public String name;
+	public String eventName;
+	public String detail; // Rich text (HTML) details about this specific EI
+	public Dates formattedDates = new Dates();
+	public String saleStatus; // "On Sale", "No longer on sale", "Not on sale yet"
+	public Boolean earlyAccess = false; // True if early access to the EI is being granted as a Membership benefit
+	public String seatingType; // "General Admission" or "Pick Your Own Seats"
+	public String contentFormat; // "Standard", "Video on Demand", etc.
+	public String purchaseUrl; // URL to the direct purchase page for this EI
+	public Boolean soldOut = true; // false unless all TAs are sold out
+	public String noSaleMessage; // Message to display if EI is soldOut, 'No longer on sale', or 'Not on sale yet'
+	public Boolean isPasscodeEligible = false; // True if the Event Instance is available for purchase prior to its public on-sale with the use of a Passcode
+	public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.EventInstancePublicFieldSet__c
+	public List<TicketAllocation> allocations = new List<TicketAllocation>();
 }
 
 class Dates
 {
-    public DateTime ISO8601;
-    public String LONG_MONTH_DAY_YEAR; // "September 22, 2012"
-    public String YYYYMMDD; // "20120922"
+	public DateTime ISO8601;
+	public String LONG_MONTH_DAY_YEAR; // "September 22, 2012"
+	public String YYYYMMDD; // "20120922"
 }
 
 class TicketAllocation
 {
-    public Id id;
-    public Id instanceId;
-    public String name;
-    public Integer sortOrder;
-    public List<TicketPriceLevel> levels = new List<TicketPriceLevel>();
-    public Boolean soldOut;
+	public Id id;
+	public Id instanceId;
+	public String name;
+	public Integer sortOrder;
+	public List<TicketPriceLevel> levels = new List<TicketPriceLevel>();
+	public Boolean soldOut;
 }
 
 class TicketPriceLevel
 {
-    public Id id;
-    public Id allocationId;
-    public String name;
-    public Decimal price;
-    public Decimal fee; // Fee that will be added to the price of the ticket
+	public Id id;
+	public Id allocationId;
+	public String name;
+	public Decimal price;
+	public Decimal fee; // Fee that will be added to the price of the ticket
 }
 
 class Venue
 {
-    public Id id;
-    public String name;
-    public String address;
-    public String detail;
-    public DateTime lastModifiedDate;
+	public Id id;
+	public String name;
+	public String address;
+	public String detail;
+	public DateTime lastModifiedDate;
 }
 ```
 
@@ -136,268 +139,565 @@ To get the custom included in the Public Event List payload, first create a Fiel
 ### Example
 ```javascript
 {
-  "venues": {
-    "a05800000070JMaAAM": {
-      "id": "a05800000070JMaAAM",
-      "name": "Falcon Theatre",
-      "lastModifiedDate": "2012-08-06T16:28:39.000Z",
-      "detail": "<p>4252 Riverside Dr. <br />Burbank, CA 91505</p>\n<p>(818) 955-8101 <br /><br />Corner of Rose St. and Riverside Dr., across from the historic Bob's Big Boy restaurant in Toluca Lake. <br /><br />Free parking available.<br /><br />All sales final, no refunds, no exchanges.</p>",
-      "address": null
-    },
-    "a0580000007STVmAAO": {
-      "id": "a0580000007STVmAAO",
-      "name": "Wide Theatre",
-      "lastModifiedDate": "2012-08-03T18:10:47.000Z",
-      "detail": "<h2>A Wide Theatre for Testing Purposes</h2>",
-      "address": "7 Research Drive\r\nWoodbridge CT, 06525"
+  "venues" : {
+    "a1A8A000001ZUvKUAW" : {
+      "name" : "The Sample Venue Theatre",
+      "lastModifiedDate" : "2021-04-02T12:26:16.000Z",
+      "id" : "a1A8A000001ZUvKUAW",
+      "detail" : "<h3>The Sample Venue Theatre is located at 3639 Williams Lane, Wichita, KS 67202</h3>\r\n<p>This beautiful 360 seat venue features superb acoustic and comfortable seating. For more information, please contact the box office at:</p>\r\n<p>Email: boxoffice@samplevenue.org</p>\r\n<p>Phone:&nbsp;316-665-7204</p>",
+      "address" : "3639 Williams Lane\r\nWichita, KS 67202"
     }
   },
-  "events": [
-    {
-      "id": "a018000000N2wwSAAR",
-      "name": "The Tom Show",
-      "type": "Tickets",
-      "sortOrder": 0,
-      "purchaseUrl": "https://sillytickets.secure.force.com/ticket#details_a018000000N2wwSAAR",
-      "description": "<p>He's the coolest guy around!</p>",
-      "detail": "<p>It's the greatest show on Earth!</p>",
-      "category": "Play;Comedy",
-      "instances": [
-        {
-          "id": "a068000000OgviCAAR",
-          "name": "Wide Theatre, Sept. 30, 2012",
-          "eventId": "a018000000N2wwSAAR",
-          "venueId": "a0580000007STVmAAO",
-          "soldOut": false,
-          "seatingType": "Pick Your Own Seats",
-          "saleStatus": "On Sale",
-          "purchaseUrl": "https://sillytickets.secure.force.com/ticket#sections_a068000000OgviCAAR",
-          "noSaleMessage": null,
-          "formattedDates": {
-            "YYYYMMDD": "20121001",
-            "LONG_MONTH_DAY_YEAR": "October 1, 2012",
-            "ISO8601": "2012-10-01T00:00:00.000Z"
-          },
-          "detail": null,
-          "allocations": [
-            {
-              "id": "a078000000GfruEAAR",
-              "name": "Floor",
-              "instanceId": "a068000000OgviCAAR",
-              "sortOrder": 0,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000HdzTFAAZ",
-                  "name": "Adult",
-                  "allocationId": "a078000000GfruEAAR",
-                  "sortOrder": null,
-                  "price": 40,
-                  "fee": 4
-                },
-                {
-                  "id": "a048000000HdzTKAAZ",
-                  "name": "Child/Senior",
-                  "allocationId": "a078000000GfruEAAR",
-                  "sortOrder": null,
-                  "price": 30,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000GfsKCAAZ",
-              "name": "Friends of Tom",
-              "instanceId": "a068000000OgviCAAR",
-              "sortOrder": 1,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000Hdzf2AAB",
-                  "name": "Friends of Tom",
-                  "allocationId": "a078000000GfsKCAAZ",
-                  "sortOrder": null,
-                  "price": 10,
-                  "fee": 2
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "a068000000OjDHlAAN",
-          "name": "Falcon Theatre, Oct. 5, 2012",
-          "eventId": "a018000000N2wwSAAR",
-          "venueId": "a05800000070JMaAAM",
-          "soldOut": false,
-          "seatingType": "Pick Your Own Seats",
-          "saleStatus": "On Sale",
-          "purchaseUrl": "https://sillytickets.secure.force.com/ticket#sections_a068000000OjDHlAAN",
-          "noSaleMessage": null,
-          "formattedDates": {
-            "YYYYMMDD": "20121006",
-            "LONG_MONTH_DAY_YEAR": "October 6, 2012",
-            "ISO8601": "2012-10-06T00:00:00.000Z"
-          },
-          "detail": null,
-          "allocations": [
-            {
-              "id": "a078000000Gh8mCAAR",
-              "name": "Side",
-              "instanceId": "a068000000OjDHlAAN",
-              "sortOrder": 0,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000IuI3kAAF",
-                  "name": "Fri/Sat/Sun",
-                  "allocationId": "a078000000Gh8mCAAR",
-                  "sortOrder": null,
-                  "price": 39.5,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000Gh8mDAAR",
-              "name": "Center",
-              "instanceId": "a068000000OjDHlAAN",
-              "sortOrder": 1,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000IuI3lAAF",
-                  "name": "Fri/Sat/Sun",
-                  "allocationId": "a078000000Gh8mDAAR",
-                  "sortOrder": null,
-                  "price": 42,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000Gh8mFAAR",
-              "name": "Accessible Side",
-              "instanceId": "a068000000OjDHlAAN",
-              "sortOrder": 3,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000IuI3nAAF",
-                  "name": "Fri/Sat/Sun",
-                  "allocationId": "a078000000Gh8mFAAR",
-                  "sortOrder": null,
-                  "price": 39.5,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000Gh8oIAAR",
-              "name": "Accessible",
-              "instanceId": "a068000000OjDHlAAN",
-              "sortOrder": 4,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000IuI3oAAF",
-                  "name": "Fri/Sat/Sun",
-                  "allocationId": "a078000000Gh8oIAAR",
-                  "sortOrder": null,
-                  "price": 42,
-                  "fee": 4
-                }
-              ]
-            }
-          ]
-        }
-      ]
+  "events" : [ {
+    "type" : "Tickets",
+    "sortOrder" : 10,
+    "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/events/a178A000002h2L0QAI",
+    "name" : "Romeo & Juliet",
+    "instances" : [ {
+      "venueId" : "a1A8A000001ZUvKUAW",
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uugYUAQ",
+      "noSaleMessage" : null,
+      "name" : "April 15, 2021, 8 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002uugYUAQ",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210416",
+        "LONG_MONTH_DAY_YEAR" : "April 16, 2021",
+        "ISO8601" : "2021-04-16T00:00:00.000Z"
+      },
+      "eventName" : "Romeo & Juliet",
+      "eventId" : "a178A000002h2L0QAI",
+      "earlyAccess" : false,
+      "detail" : "<h2>Here is an Event Instance with some information in the detail field</h2>\r\n<p>Note this field may contain HTML markup!</p>",
+      "custom" : {
+        "CustomText__c" : "Here's an EI with a single line of text",
+        "CustomMultiselectPicklist__c" : "Emerald;Fuchsia",
+        "CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "allocations" : [ {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Orchestra",
+        "levels" : [ {
+          "price" : 100.00,
+          "name" : "Standard",
+          "id" : "a168A000002LnOcQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiFQAW"
+        }, {
+          "price" : 90.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOfQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiFQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugYUAQ",
+        "id" : "a128A000003JXiFQAW"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Mezzanine",
+        "levels" : [ {
+          "price" : 90.00,
+          "name" : "Standard",
+          "id" : "a168A000002LnOaQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiGQAW"
+        }, {
+          "price" : 80.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOdQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiGQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugYUAQ",
+        "id" : "a128A000003JXiGQAW"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Balcony",
+        "levels" : [ {
+          "price" : 80.00,
+          "name" : "Standard",
+          "id" : "a168A000002LnObQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiHQAW"
+        }, {
+          "price" : 70.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOeQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiHQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugYUAQ",
+        "id" : "a128A000003JXiHQAW"
+      } ]
+    }, {
+      "venueId" : "a1A8A000001ZUvKUAW",
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "Not on sale yet",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uugdUAA",
+      "noSaleMessage" : "<p>Hold your horses! Tickets for this performance are not available for sale yet. Coming soon!</p>",
+      "name" : "May 15, 2021, 8 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002uugdUAA",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210516",
+        "LONG_MONTH_DAY_YEAR" : "May 16, 2021",
+        "ISO8601" : "2021-05-16T00:00:00.000Z"
+      },
+      "eventName" : "Romeo & Juliet",
+      "eventId" : "a178A000002h2L0QAI",
+      "earlyAccess" : false,
+      "detail" : "<h2>Here is an Event Instance with some information in the detail field</h2>\r\n<p>Note this field may contain HTML markup!</p>",
+      "custom" : {
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : null,
+        "CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "allocations" : [ {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Orchestra",
+        "levels" : [ {
+          "price" : 100.00,
+          "name" : "Standard",
+          "id" : "a168A000002LnOmQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiKQAW"
+        }, {
+          "price" : 90.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOpQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiKQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugdUAA",
+        "id" : "a128A000003JXiKQAW"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Mezzanine",
+        "levels" : [ {
+          "price" : 90.00,
+          "name" : "Standard",
+          "id" : "a168A000002LnOoQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiLQAW"
+        }, {
+          "price" : 80.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOrQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiLQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugdUAA",
+        "id" : "a128A000003JXiLQAW"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Balcony",
+        "levels" : [ {
+          "price" : 80.00,
+          "name" : "Standard",
+          "id" : "a168A000002LnOnQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiMQAW"
+        }, {
+          "price" : 70.00,
+          "name" : "Special",
+          "id" : "a168A000002LnOqQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiMQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugdUAA",
+        "id" : "a128A000003JXiMQAW"
+      } ]
+    } ],
+    "id" : "a178A000002h2L0QAI",
+    "detail" : "<h2>Here is some more detail about this performance</h2>\r\n<p>The detail field can contain HTML markup. Including hyperlinks like this one to&nbsp;<a href=\"https://www.google.com\">Google</a></p>",
+    "description" : "<h2>Here's an elaborate description of this performance</h2>\r\n<p>This performance is a \"General Admission\" performance, meaning that seating is on a first come first serve basis. Door's open 60 minutes before the show starts.</p>",
+    "custom" : {
+      "CustomTextArea__c" : "This is a multi-line custom text area.\r\nIt may contain text with embedded line breaks.\r\nHere another line.",
+      "CustomText__c" : "This field may contain a single line of text",
+      "CustomCheckbox__c" : true
     },
-    {
-      "id": "a018000000RjkZ1AAJ",
-      "name": "Twelve Angry Men - 2012",
-      "type": "Tickets",
-      "sortOrder": 41,
-      "purchaseUrl": "https://sillytickets.secure.force.com/ticket#details_a018000000RjkZ1AAJ",
-      "description": null,
-      "detail": null,
-      "category": "Play;Drama",
-      "instances": [
-        {
-          "id": "a068000000X6rHzAAJ",
-          "name": "November 2, 2012",
-          "eventId": "a018000000RjkZ1AAJ",
-          "venueId": null,
-          "soldOut": false,
-          "seatingType": "General Admission",
-          "saleStatus": "No longer on sale",
-          "purchaseUrl": "https://sillytickets.secure.force.com/ticket#sections_a068000000X6rHzAAJ",
-          "noSaleMessage": "The sale date has passed for this instance",
-          "formattedDates": {
-            "YYYYMMDD": "20121102",
-            "LONG_MONTH_DAY_YEAR": "November 2, 2012",
-            "ISO8601": "2012-11-02T23:00:00.000Z"
-          },
-          "detail": null,
-          "allocations": []
-        },
-        {
-          "id": "a068000000X6rIOAAZ",
-          "name": "November 9, 2012",
-          "eventId": "a018000000RjkZ1AAJ",
-          "venueId": null,
-          "soldOut": false,
-          "seatingType": "General Admission",
-          "saleStatus": "On Sale",
-          "purchaseUrl": "https://sillytickets.secure.force.com/ticket#sections_a068000000X6rIOAAZ",
-          "noSaleMessage": null,
-          "formattedDates": {
-            "YYYYMMDD": "20121110",
-            "LONG_MONTH_DAY_YEAR": "November 10, 2012",
-            "ISO8601": "2012-11-10T00:00:00.000Z"
-          },
-          "detail": null,
-          "allocations": [
-            {
-              "id": "a078000000JmYgtAAF",
-              "name": "General Admission",
-              "instanceId": "a068000000X6rIOAAZ",
-              "sortOrder": 1,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000KEqUTAA1",
-                  "name": "Standard",
-                  "allocationId": "a078000000JmYgtAAF",
-                  "sortOrder": null,
-                  "price": 30,
-                  "fee": 4
-                }
-              ]
-            },
-            {
-              "id": "a078000000JmYgsAAF",
-              "name": "Wheelchair",
-              "instanceId": "a068000000X6rIOAAZ",
-              "sortOrder": 2,
-              "soldOut": false,
-              "levels": [
-                {
-                  "id": "a048000000KEqUUAA1",
-                  "name": "Standard",
-                  "allocationId": "a078000000JmYgsAAF",
-                  "sortOrder": null,
-                  "price": 30,
-                  "fee": 4
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    "category" : "Play;Drama"
+  }, {
+    "type" : "Tickets",
+    "sortOrder" : 11,
+    "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/events/a178A000002h2L5QAI",
+    "name" : "Hamlet",
+    "instances" : [ {
+      "venueId" : "a1A8A000001ZUvKUAW",
+      "soldOut" : false,
+      "seatingType" : "Pick Your Own Seats",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uuk6UAA",
+      "noSaleMessage" : null,
+      "name" : "May 1, 7 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002uuk6UAA",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210501",
+        "LONG_MONTH_DAY_YEAR" : "May 1, 2021",
+        "ISO8601" : "2021-05-01T23:00:00.000Z"
+      },
+      "eventName" : "Hamlet",
+      "eventId" : "a178A000002h2L5QAI",
+      "earlyAccess" : false,
+      "detail" : "<h2>This is the Event Instance detail field</h2>\r\n<p>It may contain markup</p>",
+      "custom" : {
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : null,
+        "CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "allocations" : [ {
+        "sortOrder" : 0,
+        "soldOut" : false,
+        "name" : "Premium Orchestra",
+        "levels" : [ {
+          "price" : 100.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPQQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2TQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2TQAW"
+      }, {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Orchestra",
+        "levels" : [ {
+          "price" : 95.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPVQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2UQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2UQAW"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Premium Mezzanine",
+        "levels" : [ {
+          "price" : 90.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPUQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2VQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2VQAW"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Mezzanine",
+        "levels" : [ {
+          "price" : 85.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPTQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2WQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2WQAW"
+      }, {
+        "sortOrder" : 4,
+        "soldOut" : false,
+        "name" : "Premium Balcony",
+        "levels" : [ {
+          "price" : 80.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPSQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2XQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2XQAW"
+      }, {
+        "sortOrder" : 5,
+        "soldOut" : false,
+        "name" : "Balcony",
+        "levels" : [ {
+          "price" : 75.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPRQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY2YQAW"
+        } ],
+        "instanceId" : "a0W8A000002uuk6UAA",
+        "id" : "a128A000003JY2YQAW"
+      } ]
+    }, {
+      "venueId" : "a1A8A000001ZUvKUAW",
+      "soldOut" : false,
+      "seatingType" : "Pick Your Own Seats",
+      "saleStatus" : "Not on sale yet",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uugiUAA",
+      "noSaleMessage" : "<p>Here's a custom \"Not On Sale Yet\" message</p>",
+      "name" : "June 1, 7 PM",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002uugiUAA",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210601",
+        "LONG_MONTH_DAY_YEAR" : "June 1, 2021",
+        "ISO8601" : "2021-06-01T23:00:00.000Z"
+      },
+      "eventName" : "Hamlet",
+      "eventId" : "a178A000002h2L5QAI",
+      "earlyAccess" : false,
+      "detail" : "<h2>This is the Event Instance detail field</h2>\r\n<p>It may contain markup</p>",
+      "custom" : {
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : "Orange;Purple",
+        "CustomCheckbox__c" : true
+      },
+      "contentFormat" : "Standard",
+      "allocations" : [ {
+        "sortOrder" : 0,
+        "soldOut" : false,
+        "name" : "Premium Orchestra",
+        "levels" : [ {
+          "price" : 100.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPDQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiPQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiPQAW"
+      }, {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Orchestra",
+        "levels" : [ {
+          "price" : 95.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPGQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiQQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiQQAW"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Premium Mezzanine",
+        "levels" : [ {
+          "price" : 90.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPIQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiRQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiRQAW"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Mezzanine",
+        "levels" : [ {
+          "price" : 85.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPKQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiSQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiSQAW"
+      }, {
+        "sortOrder" : 4,
+        "soldOut" : false,
+        "name" : "Premium Balcony",
+        "levels" : [ {
+          "price" : 80.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPMQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiTQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiTQAW"
+      }, {
+        "sortOrder" : 5,
+        "soldOut" : false,
+        "name" : "Balcony",
+        "levels" : [ {
+          "price" : 75.00,
+          "name" : "Retail",
+          "id" : "a168A000002LnPOQA0",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JXiUQAW"
+        } ],
+        "instanceId" : "a0W8A000002uugiUAA",
+        "id" : "a128A000003JXiUQAW"
+      } ]
+    } ],
+    "id" : "a178A000002h2L5QAI",
+    "detail" : "<h2>Here's an event with HTML detail</h2>\r\n<p>Notice the presence of html tags in this field.</p>",
+    "description" : "<h3>Here's an event with a description containing HTML markup</h3>\r\n<p>Notice the html tags in this field.</p>",
+    "custom" : {
+      "CustomTextArea__c" : null,
+      "CustomText__c" : null,
+      "CustomCheckbox__c" : true
+    },
+    "category" : "Concert;Jazz"
+  }, {
+    "type" : "Subscription",
+    "sortOrder" : 15,
+    "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/events/a178A000002h2MwQAI",
+    "name" : "Test Subscription",
+    "instances" : [ {
+      "venueId" : null,
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a0W8A000002uukVUAQ",
+      "noSaleMessage" : null,
+      "name" : "4-Show Fixed - Mixed GA / PYOS",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002uukVUAQ",
+      "formattedDates" : {
+        "YYYYMMDD" : "20210430",
+        "LONG_MONTH_DAY_YEAR" : "April 30, 2021",
+        "ISO8601" : "2021-04-30T23:00:00.000Z"
+      },
+      "eventName" : "Test Subscription",
+      "eventId" : "a178A000002h2MwQAI",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : null,
+        "CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "allocations" : [ {
+        "sortOrder" : 1,
+        "soldOut" : false,
+        "name" : "Orchestra",
+        "levels" : [ {
+          "price" : 310.00,
+          "name" : "Subscription",
+          "id" : "a168A000002LnPrQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY5qQAG"
+        } ],
+        "instanceId" : "a0W8A000002uukVUAQ",
+        "id" : "a128A000003JY5qQAG"
+      }, {
+        "sortOrder" : 2,
+        "soldOut" : false,
+        "name" : "Mezzanine",
+        "levels" : [ {
+          "price" : 270.00,
+          "name" : "Subscription",
+          "id" : "a168A000002LnPwQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY5vQAG"
+        } ],
+        "instanceId" : "a0W8A000002uukVUAQ",
+        "id" : "a128A000003JY5vQAG"
+      }, {
+        "sortOrder" : 3,
+        "soldOut" : false,
+        "name" : "Balcony",
+        "levels" : [ {
+          "price" : 230.00,
+          "name" : "Subscription",
+          "id" : "a168A000002LnQ1QAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JY6AQAW"
+        } ],
+        "instanceId" : "a0W8A000002uukVUAQ",
+        "id" : "a128A000003JY6AQAW"
+      } ]
+    } ],
+    "id" : "a178A000002h2MwQAI",
+    "detail" : null,
+    "description" : null,
+    "custom" : {
+      "CustomTextArea__c" : null,
+      "CustomText__c" : null,
+      "CustomCheckbox__c" : false
+    },
+    "category" : null
+  }, {
+    "type" : "Membership",
+    "sortOrder" : 20,
+    "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a178A000002gtOLQAY",
+    "name" : "Membership",
+    "instances" : [ {
+      "venueId" : null,
+      "soldOut" : false,
+      "seatingType" : "General Admission",
+      "saleStatus" : "On Sale",
+      "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/instances/a178A000002gtOLQAY",
+      "noSaleMessage" : null,
+      "name" : "Membership",
+      "isPasscodeEligible" : false,
+      "id" : "a0W8A000002udGtUAI",
+      "formattedDates" : {
+        "YYYYMMDD" : "21991231",
+        "LONG_MONTH_DAY_YEAR" : "December 31, 2199",
+        "ISO8601" : "2199-12-31T08:00:00.000Z"
+      },
+      "eventName" : "Membership",
+      "eventId" : "a178A000002gtOLQAY",
+      "earlyAccess" : false,
+      "detail" : null,
+      "custom" : {
+        "CustomText__c" : null,
+        "CustomMultiselectPicklist__c" : null,
+        "CustomCheckbox__c" : false
+      },
+      "contentFormat" : "Standard",
+      "allocations" : [ {
+        "sortOrder" : 0,
+        "soldOut" : false,
+        "name" : "Membership",
+        "levels" : [ {
+          "price" : 125.00,
+          "name" : "Platinum",
+          "id" : "a168A000002LnPmQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSqAQAW"
+        }, {
+          "price" : 100.00,
+          "name" : "Gold",
+          "id" : "a168A000002LnPcQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSqAQAW"
+        }, {
+          "price" : 75.00,
+          "name" : "Silver",
+          "id" : "a168A000002LnPhQAK",
+          "fee" : 5.00,
+          "allocationId" : "a128A000003JSqAQAW"
+        } ],
+        "instanceId" : "a0W8A000002udGtUAI",
+        "id" : "a128A000003JSqAQAW"
+      } ]
+    } ],
+    "id" : "a178A000002gtOLQAY",
+    "detail" : "<h2>Here is the Membership detail value</h2>\r\n<p>This field also may contain HTML markup</p>",
+    "description" : "<h2>Here is a Membership with a description</h2>\r\n<p>This may contain HTML markup</p>",
+    "custom" : {
+      "CustomTextArea__c" : null,
+      "CustomText__c" : null,
+      "CustomCheckbox__c" : false
+    },
+    "category" : null
+  } ]
 }
 ```
-
-
