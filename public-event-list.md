@@ -36,6 +36,8 @@ class TicketableEvent
 	public String category; // Arbitrary list of category labels separated by semi-colon
 	public Integer sortOrder;
 	public String type; // Currently, "Tickets", "Subscription" or "Membership"
+	public String smallImagePath; // URL for the small image for this TE
+	public String largeImagePath; // URL for the large image for this TE
 	public String purchaseUrl; // URL to the page containing links to all EIs
 	public Map<String,Object> custom; //Enumerates fields from the FieldSet defined by settings.TicketableEventPublicFieldSet__c
 	public List<EventInstance> instances = new List<EventInstance>();
@@ -151,8 +153,10 @@ To get the custom included in the Public Event List payload, first create a Fiel
   "events" : [ {
     "type" : "Tickets",
     "sortOrder" : 10,
+    "smallImagePath" : "https://sillytickets.secure.force.com/ticket/servlet/servlet.ImageServer?id=0155Y000004o9cW&oid=00D5Y000002VmTb&lastMod=1624384870",
     "purchaseUrl" : "https://sillytickets.secure.force.com/ticket/#/events/a178A000002h2L0QAI",
     "name" : "Romeo & Juliet",
+    "largeImagePath" : "https://sillytickets.secure.force.com/ticket/servlet/servlet.ImageServer?id=0155Y000004o9cW&oid=00D5Y000002VmTb&lastMod=1624384870",
     "instances" : [ {
       "venueId" : "a1A8A000001ZUvKUAW",
       "soldOut" : false,
