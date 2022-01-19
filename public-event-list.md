@@ -129,6 +129,16 @@ if (ei.saleStatus == 'On Sale' && !ei.soldOut) {
     print ei.name + " - " + ei.noSaleMessage;
 }
 ```
+#### The Effect of Passcodes on Event Instances
+Normally, Event Instances that have future Sale Start Date values will not be listed in the event list unless its parent Ticketable Event specifies a value for the "Not On Sale Yet" Message field.
+Passcodes can be used to allow early access to these Event Instances. Event Instances having a future Sale Start Date that also have an associated Passcode whose Start Date has passed will be included in the event list, 
+regardless of whether or not their parent Ticketable Event specifies a value for the "Not On Sale Yet" Message field. This will allow buyers to follow the purchaseUrl to the Public Ticket Site,
+where a buyer can then apply the Passcode to purchase tickets early.
+
+It is also possible to create Event Instances that have no Ticket Allocations that are "Public". Normally, these would not appear in the event list.
+However, you can associate a Passcode and Access Code with "Private" Ticket Allocations. This will cause their parent Event Instances to now appear in the event list.
+This will allow buyers to follow the purchaseUrl for the Event Instance to the Public Ticket Site, where the buyer can then enter the appropriate
+Passcode to purchase tickets to the "Private" Event Instance.
 
 ### Custom Fields
 You can add custom fields to both Ticketable Event and Event Instance that you wish to have included in the Public Event List payload. The fields must first be added to the respective SObject (PatronTicket__TicketableEvent__c or PatronTicket__EventInstance__c) via the Setup -> Create -> Objects UI.
